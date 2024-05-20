@@ -9,20 +9,14 @@
 <body>
     <center>
         <h1>coffee</h1>
-        <select class="mrt-select" aria-label="mrt">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </select>
         <br>
         <br>
         <div class="button-group">
-            <button type="button" class="btn btn-warning" id="previous_mrt2">Button 1</button>
-            <button type="button" class="btn btn-warning" id="previous_mrt">Button 2</button>
-            <button type="button" class="btn btn-warning" id="current_mrt">Button 3</button>
-            <button type="button" class="btn btn-warning" id="next_mrt">Button 2</button>
-            <button type="button" class="btn btn-warning" id="next_mrt2">Button 3</button>
+            <button type="button" class="btn" id="previous_mrt2"></button>
+            <button type="button" class="btn" id="previous_mrt"></button>
+            <button type="button" class="btn" id="current_mrt"></button>
+            <button type="button" class="btn" id="next_mrt"></button>
+            <button type="button" class="btn" id="next_mrt2"></button>
         </div>
         <br>
     </center>
@@ -84,6 +78,22 @@
             }
             function showmrtbutton(mrt) {
                 console.log(mrt[1])
+                switch(mrt[1][0].station_id[0])
+                {
+                    case 'B':
+                        $('.btn').attr('class','btn btn-primary'); 
+                        break;
+                    case 'G':
+                        $('.btn').attr('class','btn btn-success'); 
+                        break;
+                    case 'O':
+                        $('.btn').attr('class','btn btn-warning'); 
+                        break;
+                    case 'R':
+                        $('.btn').attr('class','btn btn-danger'); 
+                        break;
+                }
+                
                 if (mrt[1].length > 0) {
                     $('#previous_mrt2').text(mrt[1][0].name);
                     $('#previous_mrt').text(mrt[1][1].name);
