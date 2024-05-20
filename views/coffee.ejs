@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>coffee List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <center>
+        <h1>coffee</h1>
+        <select class="mrt-select" aria-label="mrt">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+        <br>
+        <br>
+        <div class="button-group">
+            <button type="button" class="btn btn-warning" id="previous_mrt2">Button 1</button>
+            <button type="button" class="btn btn-warning" id="previous_mrt">Button 2</button>
+            <button type="button" class="btn btn-warning" id="current_mrt">Button 3</button>
+            <button type="button" class="btn btn-warning" id="next_mrt">Button 2</button>
+            <button type="button" class="btn btn-warning" id="next_mrt2">Button 3</button>
+        </div>
+        <br>
+    </center>
+    
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="store-status">
+        <label class="form-check-label" for="store-status">營業中</label>
+    </div>
+
+    <br>
+
+
+    
+
+    <div  id="coffeeList" class="row row-cols-1 row-cols-md-4 g-4" >     
+    </div>
+
+    <script>
+        let index="";
+        $(document).ready(function() {
+            $('.btn').click(function () {
+                const stationId = $(this).data('id');
+                const isChecked = $('#store-status').is(':checked');
+                index=stationId;
+                console.log('營業中:', isChecked);
+                console.log(index);
+                $.ajax({
+                    url: '/getCoffeeWithId',
+                    method: 'POST',
+                    data: {
+                        stationId: stationId
+                    },
+                    success: function (data) {
+                        console.log('Success:', data);
+                        updateCoffeeList(data); 
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+            function fetchCoffeeData(latitude, longitude) {
+                $.ajax({
+                    url: '/getCoffeeWithLocation',
+                    method: 'POST',
+                    data: { 
+                        latitude:latitude, 
+                        longitude:longitude 
+                    },
+                    success: function(data) {
+                        console.log('Success:', data);
+                        showmrtbutton(data) ;
+                        updateCoffeeList(data[0]); 
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            function showmrtbutton(mrt) {
+                console.log(mrt[1])
+                if (mrt[1].length > 0) {
+                    $('#previous_mrt2').text(mrt[1][0].name);
+                    $('#previous_mrt').text(mrt[1][1].name);
+                    $('#previous_mrt2').data('id', mrt[1][0].station_id);
+                    $('#previous_mrt').data('id', mrt[1][1].station_id);
+                }
+                else{
+                    $('#previous_mrt2').hide();
+                    $('#previous_mrt').hide();
+                }
+                $('#current_mrt').text(mrt[2][0].name);
+                $('#current_mrt').data('id', mrt[2][0].station_id);
+                index=mrt[2][0].station_id;
+                console.log(index);
+                if (mrt[3].length > 0) {
+                    $('#next_mrt').text(mrt[3][0].name);
+                    $('#next_mrt2').text(mrt[3][1].name);
+                    $('#next_mrt').data('id', mrt[3][0].station_id);
+                    $('#next_mrt2').data('id', mrt[3][1].station_id);
+
+                }
+                else{
+                    $('#next_mrt').css('display', 'none');
+                    $('#next_mrt2').hide();
+                }
+            }
+            $('#store-status').change(function () {
+                    const isChecked = $(this).is(':checked');
+                    console.log(isChecked);
+                    $.ajax({
+                        url: '/storeStatus',
+                        method: 'POST',
+                        data: {
+                            isChecked: isChecked,
+                            stationId: index
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            updateCoffeeList(data); 
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                });
+            function showPosition(position) {
+                const { latitude, longitude } = position.coords;
+                console.log(position.coords);
+                fetchCoffeeData(latitude, longitude);
+            }
+
+            function updateCoffeeList(coffees) {
+                
+                $('#coffeeList').empty();
+  
+                for (let i = 0; i < coffees.length; i++) {
+                    const coffee = coffees[i];
+                    const card = `
+                        <div class="col">
+                            <div class="card">
+                                ${coffee.photo ? `<img src="data:image/jpeg;base64,${coffee.photo}" class="card-img-top" alt="...">` : '<p>No photo available</p>'}
+                                <div class="card-body">
+                                    <h5 class="card-title">${coffee.shop_name}</h5>
+                                    <p class="card-text">${coffee.address}</p>
+                                    <a href="${coffee.url}" class="btn btn-primary">Go</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#coffeeList').append(card);
+                }
+            }
+
+            navigator.geolocation.getCurrentPosition(showPosition);
+        });
+    </script>
+</body>
+</html>

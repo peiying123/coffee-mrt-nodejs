@@ -1,0 +1,21 @@
+{
+  "name": "coffee-mrt-nodejs",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "ejs": "^3.1.10",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.19.2",
+    "jquery": "^3.7.1",
+    "mysql2": "^3.9.7",
+    "node-geolocation": "^1.15.14",
+    "popper.js": "^1.16.1"
+  }
+}

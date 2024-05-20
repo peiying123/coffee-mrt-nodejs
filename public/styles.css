@@ -1,0 +1,47 @@
+/* styles.css */
+body {
+    margin: 75px; /* Adjust as needed */
+    padding: 0;
+    background-color: #f8f9fa; /* Optional: Add a background color */
+}
+
+.container {
+    margin: auto; /* Center the container */
+    max-width: 1200px; /* Limit the maximum width of the container */
+    padding: 20px; /* Adjust padding as needed */
+    background-color: #ffffff; /* Optional: Add a background color to the container */
+    border-radius: 8px; /* Optional: Add rounded corners to the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 10px; /* Adjust as needed */
+    border: 1px solid #ddd; /* Optional: Add a border to each card */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+    overflow: hidden; /* Ensure content doesn't overflow the card */
+}
+
+.card-img-top {
+    height: 200px; /* Adjust as needed */
+    object-fit: cover;
+}
+
+.card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px; /* Adjust padding as needed */
+}
+
+.card-title, .card-text {
+    margin-bottom: 10px; /* Add some space between text elements */
+}
+
+.btn {
+    align-self: flex-end; /* Align the button to the end of the card body */
+}
